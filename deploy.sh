@@ -29,6 +29,12 @@ function run_playbook {
 
   # write secret vars
   echo ${TOKEN_PASSWORD}
+  echo ${ROOT_PASS}
+  echo $1
+  echo ${SSH_KEYS}
+  echo $2
+  echo $ADD_SSH_KEYS
+  echo $3
   #TEMP_ROOT_PASS=$(openssl rand -base64 32)
   #ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
   #ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> group_vars/galera/secret_vars
