@@ -20,17 +20,18 @@ function cleanup {
 
 function run_playbook {
   # set up virtual environment
-  virtualenv --python=python3 env
-  source env/bin/activate
+  #virtualenv --python=python3 env
+  #source env/bin/activate
   
   # install requirements
-  pip install -r requirements.txt
-  ansible-galaxy collection install linode.cloud community.crypto community.mysql
+  #pip install -r requirements.txt
+  #ansible-galaxy collection install linode.cloud community.crypto community.mysql
 
   # write secret vars
-  TEMP_ROOT_PASS=$(openssl rand -base64 32)
-  ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
-  ansible-vault encrypt_string "${1}" --name 'token' >> group_vars/galera/secret_vars
+  echo ${TOKEN_PASSWORD}
+  #TEMP_ROOT_PASS=$(openssl rand -base64 32)
+  #ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
+  #ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> group_vars/galera/secret_vars
 
   # run provision playbook
   ansible-playbook provision.yml
