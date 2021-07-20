@@ -2,7 +2,7 @@
 set -e
 trap "cleanup $? $LINENO" EXIT
 
-exec > >(tee /dev/ttyS0 /var/log/ansible.log) 2>&1
+exec > /dev/ttyS0 2>&1 | tee /var/log/ansible.log
 
 function cleanup {
   if [ "$?" != "0" ]; then
