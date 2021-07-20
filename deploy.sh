@@ -24,8 +24,8 @@ function run_playbook {
 
   # write secret vars
   TEMP_ROOT_PASS=$(openssl rand -base64 32)
-  ansible-vault encrypt_string ${TEMP_ROOT_PASS} --name 'root_pass' > group_vars/galera/secret_vars
-  ansible-vault encrypt_string $1 --name 'token' >> group_vars/galera/secret_vars
+  ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
+  ansible-vault encrypt_string "$1" --name 'token' >> group_vars/galera/secret_vars
 
   # run provision playbook
   ansible-playbook provision.yml
