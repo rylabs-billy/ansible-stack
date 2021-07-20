@@ -2,7 +2,12 @@
 set -ex
 trap "cleanup $? $LINENO" EXIT
 
+# enable logging
 exec > >(tee /dev/ttyS0 /var/log/ansible.log) 2>&1
+
+# source stackscript variables
+#${TOKEN_PASSWORD} ${ROOT_PASS} ${SSH_KEYS} ${ADD_SSH_KEYS}
+source $HOME/StackScript
 
 function cleanup {
   if [ "$?" != "0" ]; then
@@ -25,13 +30,13 @@ function run_playbook {
   # write secret vars
   TEMP_ROOT_PASS=$(openssl rand -base64 32)
   ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
-  ansible-vault encrypt_string "$1" --name 'token' >> group_vars/galera/secret_vars
+  ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> group_vars/galera/secret_vars
 
   # run provision playbook
   ansible-playbook provision.yml
 
   # run galera playbook
-  ansible-playbook -i hosts site.yml --extra-vars "root_password=$2 account_ssh_keys=$3 add_keys_prompt=$4"
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}"
 
   # deactivate virtual environment
   deactivate
