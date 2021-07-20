@@ -43,7 +43,7 @@ function run_playbook {
   ansible-playbook provision.yml
 
   # run galera playbook
-  ansible-playbook -i hosts site.yml --extra-vars "root_password=${2} account_ssh_keys=${3} add_keys_prompt=${4}"
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${1} account_ssh_keys=${2} add_keys_prompt=${3}"
 
   # deactivate virtual environment
   deactivate
