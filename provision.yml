@@ -11,7 +11,7 @@
   tasks:
   - name: creating galera linodes
     linode.cloud.instance:
-      label: '{{ galera_prefix }}{{ item + 1 }}'
+      label: '{{ galera_prefix }}{{ item }} + 1'
       api_token: '{{ token }}'
       type: '{{ type }}'
       region: '{{ region }}'
