@@ -68,7 +68,7 @@
 - name: set galera1 hostname
   shell: hostnamectl set-hostname '{{ host1 }}'
   run_once: true
-  delegate_to: "{{groups['galera_servers'][0]}}"
+  delegate_to: localhost
 
 - name: set facts for galera1
   set_fact:
@@ -76,14 +76,14 @@
     wsrep_node_address: '{{ priv_ip1 }}'
     wsrep_node_name: '{{ host1 }}'
   run_once: true
-  delegate_to: "{{groups['galera_servers'][0]}}"
+  delegate_to: localhost
 
 - name: configure galera1 galera.cnf
   template:
     src: galera.cnf.j2
     dest: /etc/mysql/conf.d/galera.cnf
   run_once: true
-  delegate_to: "{{groups['galera_servers'][0]}}"
+  delegate_to: localhost
 
 # set up galera2
 - name: set galera2 hostname
@@ -136,7 +136,7 @@
 - name: bootstrap galera1
   shell: galera_new_cluster
   run_once: true
-  delegate_to: "{{groups['galera_servers'][0]}}"
+  delegate_to: localhost
 
 - name: start galera2 mysql
   service:
