@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-trap "cleanup $? $LINENO" EXIT
+#trap "cleanup $? $LINENO" EXIT
 
 # enable logging
 #exec > >(tee /dev/ttyS0 /var/log/ansible.log) 2>&1
@@ -12,8 +12,7 @@ trap "cleanup $? $LINENO" EXIT
 function cleanup {
   if [ "$?" != "0" ]; then
     echo "PLAYBOOK FAILED. See /var/log/ansible.log for details."
-    deactivate
-    rm -rf env
+    #rm -rf env
     exit 1
   fi
 }
