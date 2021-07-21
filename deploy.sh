@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 trap "cleanup $? $LINENO" EXIT
 
 # enable logging
@@ -28,10 +28,10 @@ function run_playbook {
   #ansible-galaxy collection install linode.cloud community.crypto community.mysql
 
   # write secret vars
-  echo ${TOKEN_PASSWORD}
-  echo ${ROOT_PASS}
-  echo ${SSH_KEYS}
-  echo $ADD_SSH_KEYS
+  #echo ${TOKEN_PASSWORD}
+  #echo ${ROOT_PASS}
+  #echo ${SSH_KEYS}
+  #echo $ADD_SSH_KEYS
   #TEMP_ROOT_PASS=$(openssl rand -base64 32)
   #ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
   #ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> group_vars/galera/secret_vars
@@ -40,11 +40,7 @@ function run_playbook {
   ansible-playbook provision.yml
 
   # run galera playbook
-  #ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}""
-
-  # deactivate virtual environment
-  deactivate
-  rm -rf env
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
 # main
