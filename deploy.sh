@@ -39,7 +39,7 @@ function run_playbook {
   ansible-playbook provision.yml
 
   # run galera playbook
-  echo "ansible_ssh_private_key_file=$HOME/.ssh/id_ansible_rsa" >> hosts
+  echo "ansible_ssh_private_key_file=$HOME/.ssh/id_ansible_ed2551" >> hosts
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
