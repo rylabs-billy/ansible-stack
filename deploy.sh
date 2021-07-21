@@ -3,7 +3,7 @@ set -ex
 trap "cleanup $? $LINENO" EXIT
 
 # enable logging
-exec > >(tee /dev/ttyS0 /var/log/ansible.log) 2>&1
+#exec > >(tee /dev/ttyS0 /var/log/ansible.log) 2>&1
 
 # source stackscript variables
 #${TOKEN_PASSWORD} ${ROOT_PASS} ${SSH_KEYS} ${ADD_SSH_KEYS}
@@ -30,11 +30,8 @@ function run_playbook {
   # write secret vars
   echo ${TOKEN_PASSWORD}
   echo ${ROOT_PASS}
-  echo $1
   echo ${SSH_KEYS}
-  echo $2
   echo $ADD_SSH_KEYS
-  echo $3
   #TEMP_ROOT_PASS=$(openssl rand -base64 32)
   #ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > group_vars/galera/secret_vars
   #ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> group_vars/galera/secret_vars
