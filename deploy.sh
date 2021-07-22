@@ -12,9 +12,9 @@ function cleanup {
 function run_playbook {
   # run provision playbook
   #echo "private_key_file = $HOME/.ssh/id_ansible_ed2551" >> ansible.cfg
-  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP}" -vvv
+  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP}" --flush-cache
   # run galera playbook
-  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}" -vvv
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} account_ssh_keys=${SSH_KEYS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
 # main
