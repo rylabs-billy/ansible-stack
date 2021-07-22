@@ -1,16 +1,16 @@
 # roles/db/tasks/debian.yml
 
-- name: install python-mysqldb
+#- name: install python-mysqldb
+#  apt:
+#    name: python3-mysqldb
+#    state: latest
+#    install_recommends: yes
+
+- name: install python3-pymysql
   apt:
-    name: python3-mysqldb
+    name: python3-pymysql
     state: latest
     install_recommends: yes
-
-#- name: install python3-pymysql
- # apt:
- #   name: python3-pymysql
- #   state: latest
- #   install_recommends: yes
 
 
     
