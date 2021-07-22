@@ -52,7 +52,7 @@
     enabled: yes
 
 - name: run db queries
-  mysql_query:
+  community.mysql.mysql_query:
     login_user: root
     query:
       - drop user if exists 'mysql'@'localhost'; # useful for testing if modifying this playbook
