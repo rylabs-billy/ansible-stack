@@ -24,6 +24,7 @@
     - rsync
     - fail2ban
     - python3-mysqldb
+    - python3-pymysql
     state: latest
 
 - name: fail2ban jail.local
