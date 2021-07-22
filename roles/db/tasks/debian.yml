@@ -14,5 +14,7 @@
   run_once: true
   delegate_to: localhost
 
-
-    
+- name: Install pymysql
+  pip:
+    name: pymysql
+    executable: pip3
