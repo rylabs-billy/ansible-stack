@@ -8,9 +8,11 @@
 
 - name: install python3-pymysql
   apt:
-    name: python-pymysql
+    name: python3-mysqldb
     state: latest
     install_recommends: yes
+  run_once: true
+  delegate_to: localhost
 
 
     
