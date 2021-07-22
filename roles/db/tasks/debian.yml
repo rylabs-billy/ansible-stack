@@ -6,11 +6,11 @@
     state: latest
     install_recommends: yes
 
-- name: install python3-pymysql
-  apt:
-    name: python3-pymysql
-    state: latest
-    install_recommends: yes
+#- name: install python3-pymysql
+ # apt:
+ #   name: python3-pymysql
+ #   state: latest
+ #   install_recommends: yes
 
 
     
