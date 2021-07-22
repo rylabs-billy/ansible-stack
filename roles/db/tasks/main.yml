@@ -61,7 +61,7 @@
       - flush privileges;
     single_transaction: yes
   register: result
-  until: result.msg == None
+  until: result.rc == 0
   retries: 10
   delay: 5
 
