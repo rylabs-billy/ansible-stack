@@ -2,6 +2,6 @@
 
 - name: install python-mysqldb
   apt:
-    name: python-mysqldb
+    name: python3-mysqldb
     state: latest
     install_recommends: yes
