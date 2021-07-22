@@ -54,6 +54,7 @@
 - name: run db queries
   community.mysql.mysql_query:
     login_user: root
+    login_password: ""
     query:
       - drop user if exists 'mysql'@'localhost'; # useful for testing if modifying this playbook
       - create user 'mysql'@'localhost' identified via unix_socket;
