@@ -1,0 +1,10 @@
+# roles/firewall/handlers
+- name: firewalld enable
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: firewalld reload
+  shell: firewall-cmd --reload
+  

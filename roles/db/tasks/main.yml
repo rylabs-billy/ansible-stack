@@ -19,17 +19,17 @@
     state: latest
     install_recommends: yes
 
-- name: install python-mysql dependency for debian 10
-  import_tasks: debian.yml
-  when:
-  - ansible_distribution == 'Debian'
-  - ansible_distribution_version == '10'
+#- name: install python-mysql dependency for debian 10
+#  import_tasks: debian.yml
+#  when:
+#  - ansible_distribution == 'Debian'
+#  - ansible_distribution_version == '10'
 
-- name: install python-mysql dependency for ubuntu 20.04
-  import_tasks: ubuntu.yml
-  when:
-  - ansible_distribution == 'Ubuntu'
-  - ansible_distribution_version == '20.04'
+#- name: install python-mysql dependency for ubuntu 20.04
+#  import_tasks: ubuntu.yml
+#  when:
+#  - ansible_distribution == 'Ubuntu'
+#  - ansible_distribution_version == '20.04'
 
 - name: create mariadb.service.d directory
   file:
@@ -158,25 +158,25 @@
   delegate_to: "{{ groups['galera_servers'][1] }}"
 
 # set up firewall
-- name: install firewalld
-  apt:
-    name: firewalld
-    state: latest
+#- name: install firewalld
+#  apt:
+#    name: firewalld
+#    state: latest
 
-- name: update firewalld.conf
-  lineinfile:
-    path: /etc/firewalld/firewalld.conf
-    regexp: '^IndividualCalls=no'
-    line: IndividualCalls=yes
+#- name: update firewalld.conf
+#  lineinfile:
+#    path: /etc/firewalld/firewalld.conf
+#    regexp: '^IndividualCalls=no'
+#    line: IndividualCalls=yes
 
-- name: configure firewalld galera service
-  template:
-    src: firewalld-services-galera.j2
-    dest: /etc/firewalld/services/galera.xml
-  notify: firewalld enable
+#- name: configure firewalld galera service
+#  template:
+#    src: firewalld-services-galera.j2
+#    dest: /etc/firewalld/services/galera.xml
+#  notify: firewalld enable
 
-- name: configure firewalld internal zone
-  template:
-    src: firewalld-zones-internal.j2
-    dest: /etc/firewalld/zones/internal.xml
-  notify: firewalld reload
+#- name: configure firewalld internal zone
+#  template:
+#    src: firewalld-zones-internal.j2
+#    dest: /etc/firewalld/zones/internal.xml
+#  notify: firewalld reload
