@@ -188,6 +188,7 @@
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
+  notify: firewalld enable
 
 - name: configure firewalld internal zone on {{ host2 }} and {{ host3 }}
   template:
@@ -198,6 +199,7 @@
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
+  notify: firewalld reload
 
 # localhost firewall
 - name: install firewalld on {{ host1 }}
