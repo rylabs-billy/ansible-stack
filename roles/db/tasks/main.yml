@@ -162,16 +162,18 @@
   apt:
     name: firewalld
     state: latest
-    delegate_to: "{{ item }}"
-    loop:
-      - "{{ groups['galera_servers'][0] }}"
-      - "{{ groups['galera_servers'][1] }}"
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
 
 - name: update firewalld.conf on {{ host2 }} and {{ host3 }}
   lineinfile:
     path: /etc/firewalld/firewalld.conf
     regexp: '^IndividualCalls=no'
     line: IndividualCalls=yes
+  run_once: true
   delegate_to: "{{ item }}"
   loop:
     - "{{ groups['galera_servers'][0] }}"
@@ -181,6 +183,7 @@
   template:
     src: firewalld-services-galera.j2
     dest: /etc/firewalld/services/galera.xml
+  run_once: true
   delegate_to: "{{ item }}"
   loop:
     - "{{ groups['galera_servers'][0] }}"
@@ -190,6 +193,7 @@
   template:
     src: firewalld-zones-internal.j2
     dest: /etc/firewalld/zones/internal.xml
+  run_once: true
   delegate_to: "{{ item }}"
   loop:
     - "{{ groups['galera_servers'][0] }}"
