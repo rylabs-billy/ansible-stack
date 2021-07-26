@@ -157,26 +157,64 @@
   run_once: true
   delegate_to: "{{ groups['galera_servers'][1] }}"
 
-# set up firewall
-- name: install firewalld
+# remote hosts firewall
+- name: install firewalld on {{ host2 }} and {{ host3 }}
   apt:
     name: firewalld
     state: latest
+    delegate_to: "{{ item }}"
+    loop: "{{ groups['galera_servers'] }}"
 
-- name: update firewalld.conf
+- name: update firewalld.conf on {{ host2 }} and {{ host3 }}
   lineinfile:
     path: /etc/firewalld/firewalld.conf
     regexp: '^IndividualCalls=no'
     line: IndividualCalls=yes
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['galera_servers'] }}"
 
-- name: configure firewalld galera service
+- name: configure firewalld galera service on {{ host2 }} and {{ host3 }}
   template:
     src: firewalld-services-galera.j2
     dest: /etc/firewalld/services/galera.xml
-  notify: firewalld enable
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['galera_servers'] }}"
 
-- name: configure firewalld internal zone
+- name: configure firewalld internal zone on {{ host2 }} and {{ host3 }}
   template:
     src: firewalld-zones-internal.j2
     dest: /etc/firewalld/zones/internal.xml
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['galera_servers'] }}"
+
+# localhost firewall
+- name: install firewalld on {{ host1 }}
+  apt:
+    name: firewalld
+    state: latest
+  run_once: true
+  delegate_to: localhost
+
+- name: update firewalld.conf on {{ host1 }}
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: '^IndividualCalls=no'
+    line: IndividualCalls=yes
+  run_once: true
+  delegate_to: localhost
+
+- name: configure firewalld galera service on {{ host1 }}
+  template:
+    src: firewalld-services-galera.j2
+    dest: /etc/firewalld/services/galera.xml
+  run_once: true
+  delegate_to: localhost
+  notify: firewalld enable
+
+- name: configure firewalld internal zone on {{ host1 }}
+  template:
+    src: firewalld-zones-internal.j2
+    dest: /etc/firewalld/zones/internal.xml
+  run_once: true
+  delegate_to: localhost
   notify: firewalld reload
