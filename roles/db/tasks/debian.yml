@@ -6,13 +6,13 @@
 #    state: latest
 #    install_recommends: yes
 
-#- name: install python3-pymysql
-#  apt:
-##    name: python3-mysqldb
-#    state: latest
-#    install_recommends: yes
-#  run_once: true
-#  delegate_to: localhost
+- name: install python3-pymysql
+  apt:
+    name: python3-mysqldb
+    state: latest
+    install_recommends: yes
+  run_once: true
+  delegate_to: localhost
 
 #- name: Install pymysql
 #  pip:
