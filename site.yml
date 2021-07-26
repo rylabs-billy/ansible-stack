@@ -23,3 +23,16 @@
   roles:
     - common
     - db
+
+# firewall
+- name: configure galera linodes
+  hosts: localhost:galera_servers
+  serial: 1
+  any_errors_fatal: true
+  user: root
+  vars_files:
+    - group_vars/galera/vars
+    - group_vars/galera/secret_vars
+  
+  roles:
+    - firewall
