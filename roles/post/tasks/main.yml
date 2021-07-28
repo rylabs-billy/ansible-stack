@@ -13,7 +13,7 @@
 
 - name: add account ssh keys 
   copy:
-    dest: '{{ /root/.ssh/authorized_keys }}'
+    dest:  /root/.ssh/authorized_keys
     content: '{{ account_ssh_keys }}'
     owner: root
     group: root
