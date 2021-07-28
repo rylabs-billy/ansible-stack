@@ -5,6 +5,16 @@
     state: started
     enabled: yes
 
+- name: local firewalld enable
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
 - name: firewalld reload
   shell: firewall-cmd --reload
+
+- name: local firewalld reload
+  shell: firewall-cmd --reload
+  
   

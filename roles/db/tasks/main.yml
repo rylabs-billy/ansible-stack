@@ -19,18 +19,6 @@
     state: latest
     install_recommends: yes
 
-#- name: install python-mysql dependency for debian 10
-#  import_tasks: debian.yml
-#  when:
-#  - ansible_distribution == 'Debian'
-#  - ansible_distribution_version == '10'
-
-#- name: install python-mysql dependency for ubuntu 20.04
-#  import_tasks: ubuntu.yml
-#  when:
-#  - ansible_distribution == 'Ubuntu'
-#  - ansible_distribution_version == '20.04'
-
 - name: create mariadb.service.d directory
   file:
     path: /etc/systemd/system/mariadb.service.d
@@ -202,7 +190,6 @@
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
   
-
 # localhost firewall
 - name: install firewalld on {{ host1 }}
   apt:
@@ -225,7 +212,7 @@
     dest: /etc/firewalld/services/galera.xml
   run_once: true
   delegate_to: localhost
-  notify: firewalld enable
+  notify: local firewalld enable
 
 - name: configure firewalld internal zone on {{ host1 }}
   template:
@@ -233,4 +220,4 @@
     dest: /etc/firewalld/zones/internal.xml
   run_once: true
   delegate_to: localhost
-  notify: firewalld reload
+  notify: local firewalld reload
