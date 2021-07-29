@@ -1,9 +1,15 @@
 # roles/db/handlers
-- name: firewalld enable
+- name: remote firewalld enable
   service:
     name: firewalld
     state: started
     enabled: yes
+  run_once: true
+  delgate_to: '{{ item }}'
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+
 
 - name: local firewalld enable
   service:
@@ -11,8 +17,13 @@
     state: started
     enabled: yes
 
-- name: firewalld reload
+- name: remote firewalld reload
   shell: firewall-cmd --reload
+  run_once: true
+  delgate_to: '{{ item }}'
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
 
 - name: local firewalld reload
   shell: firewall-cmd --reload
