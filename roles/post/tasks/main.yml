@@ -33,6 +33,7 @@
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
   
+  
 #- name: remove ansible ssh keys
 #  block:
 #    - name: remove ansible ssh keys
