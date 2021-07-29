@@ -5,7 +5,7 @@
     state: started
     enabled: yes
   run_once: true
-  delgate_to: '{{ item }}'
+  delegate_to: '{{ item }}'
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
@@ -20,7 +20,7 @@
 - name: remote firewalld reload
   shell: firewall-cmd --reload
   run_once: true
-  delgate_to: '{{ item }}'
+  delegate_to: '{{ item }}'
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
