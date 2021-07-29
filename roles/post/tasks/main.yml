@@ -26,12 +26,12 @@
     owner: root
     group: root
     mode: '0600'
-  when: add_keys_prompt == 'yes'
   run_once: true
   delegate_to: "{{ item }}"
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
+  when: add_keys_prompt == 'yes'
   
   
 #- name: remove ansible ssh keys
@@ -46,13 +46,13 @@
 #      run_once: true
 #      delegate_to: localhost
 
-    - name: remove ansible from authorized_keys
-      lineinfile:
-        dest: /root/.ssh/authorized_keys
-        state: absent
-        regexp: /(^.+ansible$)/s
-      run_once: true
-      delegate_to: "{{ item }}"
-      loop:
-        - "{{ groups['galera_servers'][0] }}"
-        - "{{ groups['galera_servers'][1] }}"
+- name: remove ansible from authorized_keys
+  lineinfile:
+    dest: /root/.ssh/authorized_keys
+    state: absent
+    regexp: /(^.+ansible$)/s
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
