@@ -171,7 +171,7 @@
   template:
     src: firewalld-services-galera.j2
     dest: /etc/firewalld/services/galera.xml
-  notify: firewalld enable
+  notify: remote firewalld enable
   run_once: true
   delegate_to: "{{ item }}"
   loop:
@@ -183,7 +183,7 @@
   template:
     src: firewalld-zones-internal.j2
     dest: /etc/firewalld/zones/internal.xml
-  notify: firewalld reload
+  notify: remote firewalld reload
   run_once: true
   delegate_to: "{{ item }}"
   loop:
