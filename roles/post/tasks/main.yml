@@ -48,7 +48,7 @@
       lineinfile:
         dest: /root/.ssh/authorized_keys
         state: absent
-        regexp: 'ansible$' /(^.+ansible$)/s
+        regexp: /(^.+ansible$)/s
       run_once: true
       delegate_to: "{{ item }}"
       loop:
