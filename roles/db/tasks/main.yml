@@ -171,7 +171,7 @@
   template:
     src: firewalld-services-galera.j2
     dest: /etc/firewalld/services/galera.xml
-  notify: remote firewalld enable
+  #notify: remote firewalld enable
   run_once: true
   delegate_to: "{{ item }}"
   loop:
@@ -183,13 +183,34 @@
   template:
     src: firewalld-zones-internal.j2
     dest: /etc/firewalld/zones/internal.xml
-  notify: remote firewalld reload
+  #notify: remote firewalld reload
   run_once: true
   delegate_to: "{{ item }}"
   loop:
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
   
+# new
+- name: remote firewalld enable
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  run_once: true
+  delegate_to: '{{ item }}'
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+
+- name: remote firewalld reload
+  shell: firewall-cmd --reload
+  run_once: true
+  delegate_to: '{{ item }}'
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+# end new
+
 # localhost firewall
 - name: install firewalld on {{ host1 }}
   apt:
@@ -212,7 +233,7 @@
     dest: /etc/firewalld/services/galera.xml
   run_once: true
   delegate_to: localhost
-  notify: local firewalld enable
+  #notify: local firewalld enable
 
 - name: configure firewalld internal zone on {{ host1 }}
   template:
@@ -220,4 +241,19 @@
     dest: /etc/firewalld/zones/internal.xml
   run_once: true
   delegate_to: localhost
-  notify: local firewalld reload
+  #notify: local firewalld reload
+
+  # new
+- name: local firewalld enable
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  run_once: true
+  delegate_to: localhost
+
+- name: local firewalld reload
+  shell: firewall-cmd --reload
+  run_once: true
+  delegate_to: localhost
+  # end new
