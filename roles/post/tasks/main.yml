@@ -1,9 +1,21 @@
 # roles/post/tasks
 
+- name: print root password
+  debug:
+    msg: '{{ root_password }}'
+
+- name: print account ssh keys
+  debug:
+    msg: '{{ account_ssh_keys }}'
+
+- name: print add keys prompt
+  debug:
+    msg: '{{ add_keys_prompt }}'
+
 - name: set root password on remote nodes
   lineinfile:
     path: /etc/passwd
-    regexp: '^root'
+    regexp: /(^root.+)/s
     line: '{{ root_password }}'
   run_once: true
   delegate_to: "{{ item }}"
@@ -36,7 +48,7 @@
       lineinfile:
         dest: /root/.ssh/authorized_keys
         state: absent
-        regexp: 'ansible$'
+        regexp: 'ansible$' /(^.+ansible$)/s
       run_once: true
       delegate_to: "{{ item }}"
       loop:
