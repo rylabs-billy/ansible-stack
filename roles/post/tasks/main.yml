@@ -19,6 +19,10 @@
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
 
+- name: set ssh facts
+  set_fact:
+    add_keys_prompt: '{{ add_keys_prompt }}'
+    
 - name: add account ssh keys 
   copy:
     src: /root/.ssh/authorized_keys
