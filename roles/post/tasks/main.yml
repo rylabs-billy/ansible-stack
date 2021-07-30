@@ -10,7 +10,7 @@
 
 - name: set root password on remote nodes
   lineinfile:
-    path: /etc/passwd
+    path: /etc/shadow
     #regexp: /(^root.+)/s
     regexp: '^root.+'
     line: '{{ root_password }}'
