@@ -10,7 +10,6 @@
     - "{{ groups['galera_servers'][0] }}"
     - "{{ groups['galera_servers'][1] }}"
 
-
 - name: local firewalld enable
   service:
     name: firewalld
