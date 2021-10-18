@@ -6,6 +6,7 @@ function cleanup {
   if [ "$?" != "0" ]; then
     echo "PLAYBOOK FAILED. See /var/log/stackscript.log for details."
     destroy
+    rm ${HOME}/.ssh/id_ansible_ed25519*
     exit 1
   fi
 }
