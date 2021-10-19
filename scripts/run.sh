@@ -94,9 +94,6 @@ function ansible:deploy {
 function build {
     #curl -so ${VARS_PATH} ${VARS_URL}
 	echo "${VAULT_PASS}" > ./vault-pass
-    echo "${TEMP_ROOT_PASS}"
-    echo "test"
-    echo "${TOKEN_PASSWORD}"
 	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
 	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
     
