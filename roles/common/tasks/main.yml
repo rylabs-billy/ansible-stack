@@ -26,7 +26,7 @@
     - python3-pip
     #- python3-mysqldb
     - python3-pymysql
-    state: latest
+    state: present
 
 - name: fail2ban jail.local
   copy:
