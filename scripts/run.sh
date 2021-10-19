@@ -110,7 +110,7 @@ function build {
 
 case $1 in
     private_ip) "$@"; exit;;
-    ansible:vars) "$@"; exit;;
+    ansible:build) "$@"; exit;;
     ansible:deploy) "$@"; exit;;
     build) "$@"; exit;;
     env) "$@"; exit;;
