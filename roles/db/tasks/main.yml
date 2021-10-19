@@ -132,14 +132,14 @@
   delegate_to: localhost
 
 - name: start galera2 mysql
-  service:
+  systemd:
     name: mysql
     state: started
   run_once: true
   delegate_to: "{{groups['galera_servers'][0]}}"
 
 - name: start galera3 mysql
-  service:
+  systemd:
     name: mysql
     state: started
   run_once: true
