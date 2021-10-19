@@ -98,10 +98,10 @@ function build {
     
     # add ssh keys
     chmod 700 ${HOME}/.ssh
-    chmod 600 ${SSH_KEY_PATH}
+    chmod 600 ${ANSIBLE_SSH_KEY_PATH}
     eval $(ssh-agent)
-    ssh-add ${SSH_KEY_PATH}
-    echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
+    ssh-add ${ANSIBLE_SSH_KEY_PATH}
+    echo -e "\nprivate_key_file = $ANSIBLE_SSH_KEY_PATH}" >> ansible.cfg
 }
 
 case $1 in
