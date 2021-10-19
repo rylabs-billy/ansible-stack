@@ -89,3 +89,13 @@ function ansible:deploy {
   # run galera playbook
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
+
+case $1 in
+    private_ip) "$@"; exit;;
+    ansible:vars) "$@"; exit;;
+    ansible:deploy) "$@"; exit;;
+esac
+
+# main
+private_ip
+ansible
