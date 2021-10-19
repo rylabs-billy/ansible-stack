@@ -12,8 +12,8 @@ function cleanup {
 }
 
 # global constants
-readonly ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
-readonly ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
+#readonly ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
+#readonly ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
 readonly ANSIBLE_SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
 readonly ROOT_PASS=$(cat /etc/shadow | grep root)
 readonly TEMP_ROOT_PASS=$(openssl rand -base64 32)
@@ -99,6 +99,8 @@ function build {
     
     # add ssh key
     ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
+    export ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
+    export ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
     chmod 700 ${HOME}/.ssh
     chmod 600 ${ANSIBLE_SSH_KEY_PATH}
     eval $(ssh-agent)
