@@ -6,13 +6,13 @@ function cleanup {
   if [ "$?" != "0" ]; then
     echo "PLAYBOOK FAILED. See /var/log/stackscript.log for details."
     #rm ${HOME}/.ssh/id_ansible_ed25519*
-    #destroy
+    destroy
     exit 1
   fi
 }
 
 # global constants
-readonly ANSIBLE_SSH_PUB_KEY=$(ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null && cat ${HOME}/.ssh/id_ansible_ed25519.pub)
+readonly ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
 readonly ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
 readonly ANSIBLE_SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
 readonly ROOT_PASS=$(cat /etc/shadow | grep root)
@@ -30,9 +30,9 @@ readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
 #readonly DEBIAN_IMAGE="linode/debian10"
 
 # utility functions
-function env {
-  echo "${ANSIBLE_SSH_PUB_KEY}"
-}
+#function env {
+#  echo "${ANSIBLE_SSH_PUB_KEY}"
+#}
 
 function destroy {
     ansible-playbook -i hosts destroy.yml
@@ -97,7 +97,8 @@ function build {
 	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
 	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
     
-    # add ssh keys
+    # add ssh key
+    ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
     chmod 700 ${HOME}/.ssh
     chmod 600 ${ANSIBLE_SSH_KEY_PATH}
     eval $(ssh-agent)
