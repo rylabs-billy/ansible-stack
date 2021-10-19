@@ -87,7 +87,7 @@ function ansible:deploy {
   #echo -e "\nprivate_key_file = ${ANSIBLE_SSH_KEY_PATH}" >> ansible.cfg
   ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP} root_pass=${TEMP_ROOT_PASS} token=${TOKEN_PASSWORD}" --flush-cache
   # run galera playbook
-  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
+  ansible-playbook -i hosts site.yml -vvv --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
 case $1 in
