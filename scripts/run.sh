@@ -14,7 +14,7 @@ function cleanup {
 # global constants
 #readonly ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
 #readonly ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
-readonly ANSIBLE_SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
+readonly SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
 readonly ROOT_PASS=$(cat /etc/shadow | grep root)
 readonly TEMP_ROOT_PASS=$(openssl rand -base64 32)
 readonly GIT_REPO="https://rylabs-billy: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@github.com/rylabs-billy/ansible-stack.git"
@@ -98,14 +98,14 @@ function build {
 	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
     
     # add ssh key
-    ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
-    export ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
-    export ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
+    #ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
+    #export ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
+    #export ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
     chmod 700 ${HOME}/.ssh
-    chmod 600 ${ANSIBLE_SSH_KEY_PATH}
+    chmod 600 ${SSH_KEY_PATH}
     eval $(ssh-agent)
-    ssh-add ${ANSIBLE_SSH_KEY_PATH}
-    echo -e "\nprivate_key_file = ${ANSIBLE_SSH_KEY_PATH}" >> ansible.cfg
+    ssh-add ${SSH_KEY_PATH}
+    echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
 }
 
 case $1 in
