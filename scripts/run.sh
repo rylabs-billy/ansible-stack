@@ -39,7 +39,7 @@ function destroy {
 }
 
 function private_ip {
-  local PRIVATE_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[1])
+  export PRIVATE_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[1])
   if [[ "${PRIVATE_IP}" != *"192.168"* ]];
   then
     curl -sH "Content-Type: application/json" \
@@ -51,7 +51,7 @@ function private_ip {
       }'  https://api.linode.com/v4/networking/ips
 
     # configure private ip on control node
-    local PRIVATE_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[1])
+    export PRIVATE_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[1])
     ip addr add ${PRIVATE_IP}/17 dev eth0 label eth0:1
     echo "    up   ip addr add 192.168.146.211/17 dev eth0 label eth0:1" >> /etc/network/interfaces
     echo "    down ip addr del 192.168.146.211/17 dev eth0 label eth0:1" >> /etc/network/interfaces

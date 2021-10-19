@@ -16,7 +16,7 @@
     - mariadb-server
     - mariadb-backup
     - python3-openssl
-    state: latest
+    state: present
     install_recommends: yes
 
 - name: create mariadb.service.d directory
