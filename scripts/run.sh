@@ -23,9 +23,9 @@ readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.
 readonly PUBLIC_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[0])
 readonly VARS_PATH="./group_vars/galera/vars"
 #readonly ANSIBLE_SSH_KEY=$(echo | ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "$HOME/.ssh/id_ansible_ed25519" > /dev/null && cat $HOME/.ssh/id_ansible_ed25519.pub)
-#readonly VAULT_PASS=$(openssl rand -base64 32)
+readonly VAULT_PASS=$(openssl rand -base64 32)
 #readonly DATETIME=$(date '+%Y-%m-%d_%H%M%S')
-#readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
+readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
 #readonly UBUNTU_IMAGE="linode/ubuntu20.04"
 #readonly DEBIAN_IMAGE="linode/debian10"
 
@@ -85,17 +85,33 @@ EOF
 function ansible:deploy {
   # run provision playbook
   #echo -e "\nprivate_key_file = ${ANSIBLE_SSH_KEY_PATH}" >> ansible.cfg
-  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP} root_pass=${TEMP_ROOT_PASS} token=${TOKEN_PASSWORD}" --flush-cache
+  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP}" --flush-cache
   # run galera playbook
   ansible-playbook -i hosts site.yml -vvv --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
+}
+
+function build {
+    #curl -so ${VARS_PATH} ${VARS_URL}
+	echo "${VAULT_PASS}" > ./vault-pass
+	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
+	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
+    
+    # add ssh keys
+    chmod 700 ${HOME}/.ssh
+    chmod 600 ${SSH_KEY_PATH}
+    eval $(ssh-agent)
+    ssh-add ${SSH_KEY_PATH}
+    echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
 }
 
 case $1 in
     private_ip) "$@"; exit;;
     ansible:vars) "$@"; exit;;
     ansible:deploy) "$@"; exit;;
+    build) "$@"; exit;;
 esac
 
 # main
 private_ip
 ansible
+build
