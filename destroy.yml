@@ -6,7 +6,7 @@
       - group_vars/galera/vars
   
   vars:
-    count: 3
+    count: 2
 
   tasks:
   - name: deleting galera linodes

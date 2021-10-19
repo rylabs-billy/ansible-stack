@@ -5,8 +5,8 @@ trap "cleanup $? $LINENO" EXIT
 function cleanup {
   if [ "$?" != "0" ]; then
     echo "PLAYBOOK FAILED. See /var/log/stackscript.log for details."
-    destroy
     rm ${HOME}/.ssh/id_ansible_ed25519*
+    destroy
     exit 1
   fi
 }
@@ -35,7 +35,7 @@ function env {
 }
 
 function destroy {
-    ansible-playbook -i hosts destroy.yml
+    ansible-playbook -i hosts destroy.yml --extra_vars token=${TOKEN_PASSWORD}"
 }
 
 function private_ip {
@@ -85,7 +85,7 @@ EOF
 function ansible:deploy {
   # run provision playbook
   #echo "private_key_file = $HOME/.ssh/id_ansible_ed2551" >> ansible.cfg
-  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP} root_pass=${TEMP_ROOT_PASS}" --flush-cache
+  ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP} root_pass=${TEMP_ROOT_PASS} token=${TOKEN_PASSWORD}" --flush-cache
   # run galera playbook
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
