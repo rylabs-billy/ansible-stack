@@ -38,7 +38,7 @@ function destroy {
     ansible-playbook -i hosts destroy.yml
 }
 
-function private_ip {
+function private_ip_check {
   export PRIVATE_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[1])
   if [[ "${PRIVATE_IP}" != *"192.168"* ]];
   then
@@ -87,6 +87,7 @@ EOF
 function ansible:deploy {
   # run provision playbook
   #echo -e "\nprivate_key_file = ${ANSIBLE_SSH_KEY_PATH}" >> ansible.cfg
+  private_ip_check
   ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP}" --flush-cache
   # run galera playbook
   ansible-playbook -i hosts site.yml -vvv --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
