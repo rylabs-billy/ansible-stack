@@ -31,7 +31,7 @@ readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
 
 # utility functions
 function env {
-  source env/bin/activate
+  echo "${ANSIBLE_SSH_PUB_KEY}"
 }
 
 function destroy {
@@ -59,7 +59,8 @@ function private_ip {
   fi
 }
 
-function ansible:vars {
+function ansible:build {
+  build
   # write vars file
   sed 's/  //g' <<EOF > group_vars/galera/vars
   # linode vars
@@ -109,9 +110,11 @@ case $1 in
     ansible:vars) "$@"; exit;;
     ansible:deploy) "$@"; exit;;
     build) "$@"; exit;;
+    env) "$@"; exit;;
 esac
 
 # main
 private_ip
 ansible
 build
+env
