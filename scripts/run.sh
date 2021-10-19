@@ -5,8 +5,8 @@ trap "cleanup $? $LINENO" EXIT
 function cleanup {
   if [ "$?" != "0" ]; then
     echo "PLAYBOOK FAILED. See /var/log/stackscript.log for details."
-    #rm ${HOME}/.ssh/id_ansible_ed25519*
-    #destroy
+    rm ${HOME}/.ssh/id_ansible_ed25519{,.pub}
+    destroy
     exit 1
   fi
 }
@@ -30,10 +30,6 @@ readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
 #readonly DEBIAN_IMAGE="linode/debian10"
 
 # utility functions
-#function env {
-#  echo "${ANSIBLE_SSH_PUB_KEY}"
-#}
-
 function destroy {
     ansible-playbook -i hosts destroy.yml
 }
@@ -90,7 +86,7 @@ function ansible:deploy {
   private_ip_check
   ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP}" --flush-cache
   # run galera playbook
-  ansible-playbook -i hosts site.yml -vvv --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
 function build_old {
