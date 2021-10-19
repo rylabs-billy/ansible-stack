@@ -84,7 +84,7 @@ EOF
 
 function ansible:deploy {
   # run provision playbook
-  #echo "private_key_file = $HOME/.ssh/id_ansible_ed2551" >> ansible.cfg
+  echo "private_key_file = ${HOME}/.ssh/id_ansible_ed25519" >> ansible.cfg
   ansible-playbook provision.yml --extra-vars "localhost_public_ip=${PUBLIC_IP} localhost_private_ip=${PRIVATE_IP} root_pass=${TEMP_ROOT_PASS} token=${TOKEN_PASSWORD}" --flush-cache
   # run galera playbook
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS} add_keys_prompt=${ADD_SSH_KEYS}"
