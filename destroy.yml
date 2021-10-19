@@ -12,7 +12,7 @@
   tasks:
   - name: deleting galera linodes
     linode.cloud.instance:
-      label: '{{ galera_prefix }}{{ item }}'
+      label: '{{ galera_prefix }}{{ 1 + item|int }}'
       api_token: '{{ token }}'
       state: absent
     with_sequence: count='{{count}}'
