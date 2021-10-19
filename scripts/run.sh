@@ -35,7 +35,7 @@ function env {
 }
 
 function destroy {
-    ansible-playbook -i hosts destroy.yml --extra_vars token=${TOKEN_PASSWORD}"
+    ansible-playbook -i hosts destroy.yml --extra_vars "token=${TOKEN_PASSWORD}"
 }
 
 function private_ip {
