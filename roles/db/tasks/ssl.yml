@@ -99,18 +99,6 @@
     - { src: '{{ server_key.privatekey }}', dest: /etc/ssl/mysql/galera-server-key.pem }
   no_log: true 
 
-#- name: set permissions for ssl certs
-#  file:
-#    path: '/etc/ssl/mysql/{{ item }}'
-#    state: file
-#    owner: mysql
-#    group: mysql
-#    mode: '0660'
-#  loop:
-#    - galera-ca-crt.pem
-#    - galera-server-crt.pem
-#    - galera-server-key.pem
-
 - name: clear varibles
   set_fact:
     ca_crt: ''

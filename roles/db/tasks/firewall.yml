@@ -1,0 +1,112 @@
+# roles/db/tasks/firewall.yml
+
+# remote host firewalls
+- name: install firewalld on {{ host2 }} and {{ host3 }}
+  apt:
+    name: firewalld
+    state: present
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+
+- name: update firewalld.conf on {{ host2 }} and {{ host3 }}
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: '^IndividualCalls=no'
+    line: IndividualCalls=yes
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+
+- name: configure firewalld galera service on {{ host2 }} and {{ host3 }}
+  template:
+    src: firewalld-services-galera.j2
+    dest: /etc/firewalld/services/galera.xml
+  #notify: remote firewalld enable
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+  
+
+- name: configure firewalld internal zone on {{ host2 }} and {{ host3 }}
+  template:
+    src: firewalld-zones-internal.j2
+    dest: /etc/firewalld/zones/internal.xml
+  notify: remote firewalld enable
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
+  
+# new
+#- name: remote firewalld enable
+#  service:
+#    name: firewalld
+#    state: started
+#    enabled: yes
+#  run_once: true
+#  delegate_to: '{{ item }}'
+#  loop:
+#    - "{{ groups['galera_servers'][0] }}"
+#    - "{{ groups['galera_servers'][1] }}"
+
+#- name: remote firewalld reload
+#  shell: firewall-cmd --reload
+#  run_once: true
+#  delegate_to: '{{ item }}'
+#  loop:
+#    - "{{ groups['galera_servers'][0] }}"
+#    - "{{ groups['galera_servers'][1] }}"
+# end new
+
+# localhost firewall
+- name: install firewalld on {{ host1 }}
+  apt:
+    name: firewalld
+    state: latest
+  run_once: true
+  delegate_to: localhost
+
+- name: update firewalld.conf on {{ host1 }}
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: '^IndividualCalls=no'
+    line: IndividualCalls=yes
+  run_once: true
+  delegate_to: localhost
+
+- name: configure firewalld galera service on {{ host1 }}
+  template:
+    src: firewalld-services-galera.j2
+    dest: /etc/firewalld/services/galera.xml
+  run_once: true
+  delegate_to: localhost
+  #notify: local firewalld enable
+
+- name: configure firewalld internal zone on {{ host1 }}
+  template:
+    src: firewalld-zones-internal.j2
+    dest: /etc/firewalld/zones/internal.xml
+  run_once: true
+  delegate_to: localhost
+  notify: local firewalld enable
+
+#- name: local firewalld enable
+#  service:
+#    name: firewalld
+#    state: started
+#    enabled: yes
+#  run_once: true
+#  delegate_to: localhost
+
+#- name: local firewalld reload
+#  shell: firewall-cmd --reload
+#  run_once: true
+#  delegate_to: localhost

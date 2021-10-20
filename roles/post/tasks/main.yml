@@ -1,17 +1,8 @@
 # roles/post/tasks
 
-- name: print root password
-  debug:
-    msg: '{{ root_password }}'
-
-- name: print add keys prompt
-  debug:
-    msg: '{{ add_keys_prompt }}'
-
 - name: set root password on remote nodes
   lineinfile:
     path: /etc/shadow
-    #regexp: /(^root.+)/s
     regexp: '^root.+'
     line: '{{ root_password }}'
   run_once: true
