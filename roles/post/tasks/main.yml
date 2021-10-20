@@ -29,26 +29,23 @@
     - "{{ groups['galera_servers'][1] }}"
   when: add_keys_prompt == 'yes'
   
-  
-#- name: remove ansible ssh keys
-#  block:
-#    - name: remove ansible ssh keys
-#      file:
-#        path: '{{ item }}'
-#        state: absent
-#      loop:
-#        - /root/.ssh/id_ansible_ed25519
-#        - /root/.ssh/id_ansible_ed25519.pub
-#      run_once: true
-#      delegate_to: localhost
+- name: remove ansible from authorized_keys
+  lineinfile:
+    dest: /root/.ssh/authorized_keys
+    state: absent
+    regexp: '^.+ansible$'
+  run_once: true
+  delegate_to: "{{ item }}"
+  loop:
+    - "{{ groups['galera_servers'][0] }}"
+    - "{{ groups['galera_servers'][1] }}"
 
-#- name: remove ansible from authorized_keys
-#  lineinfile:
-#    dest: /root/.ssh/authorized_keys
-##    state: absent
-##    regexp: /(^.+ansible$)/s
-# run_once: true
-#  delegate_to: "{{ item }}"
-#  loop:
-#    - "{{ groups['galera_servers'][0] }}"
-#    - "{{ groups['galera_servers'][1] }}"
+- name: remove ansible ssh keys
+  file:
+    path: '{{ item }}'
+    state: absent
+  run_once: true
+  delegate_to: localhost
+  loop:
+    - /root/.ssh/id_ansible_ed25519
+    - /root/.ssh/id_ansible_ed25519.pub
