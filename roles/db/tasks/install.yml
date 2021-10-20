@@ -6,9 +6,9 @@
     path: /etc/hosts
     marker: "# {mark} GALERA HOSTS"
     block: |
-      {{ priv_ip1}} {{ host1 }}
-      {{ priv_ip2}} {{ host2 }}
-      {{ priv_ip3}} {{ host3 }}
+      {{ priv_ip1 }} {{ host1 }}
+      {{ priv_ip2 }} {{ host2 }}
+      {{ priv_ip3 }} {{ host3 }}
 
 - name: install mariadb and dependencies
   apt:
@@ -29,9 +29,11 @@
   template:
     src: timeoutstartsec.conf.j2
     dest: /etc/systemd/system/mariadb.service.d/timeoutstartsec.conf
+    mode: '0644'
 
 - name: systemd daemon reload
-  shell: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
 
 - name: start mysql
   service:
@@ -40,9 +42,8 @@
     enabled: yes
 
 - name: run db queries
-  community.mysql.mysql_query:
+  mysql_query:
     login_user: root
-    login_unix_socket: /run/mysqld/mysqld.sock
     query:
       - drop user if exists 'mysql'@'localhost'; # useful for testing if modifying this playbook
       - create user 'mysql'@'localhost' identified via unix_socket;

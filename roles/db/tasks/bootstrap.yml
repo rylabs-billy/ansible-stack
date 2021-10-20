@@ -2,25 +2,25 @@
 
 # bootstrap the cluster
 - name: stop mysql
-  service:
+  systemd:
     name: mysql
     state: stopped
 
-- name: bootstrap galera1
+- name: bootstrap {{ host1 }}
   shell: galera_new_cluster
   run_once: true
-  delegate_to: localhost
+  delegate_to: "{{ groups['galera_servers'][0] }}"
 
-- name: start galera2 mysql
-  systemd:
-    name: mysql
-    state: started
-  run_once: true
-  delegate_to: "{{groups['galera_servers'][0]}}"
-
-- name: start galera3 mysql
+- name: start {{ host2 }} mysql
   systemd:
     name: mysql
     state: started
   run_once: true
   delegate_to: "{{ groups['galera_servers'][1] }}"
+
+- name: start {{ host3 }} mysql
+  systemd:
+    name: mysql
+    state: started
+  run_once: true
+  delegate_to: "{{ groups['galera_servers'][2] }}"

@@ -1,31 +1,6 @@
 # roles/db/handlers
-
-- name: remote firewalld enable
+- name: firewalld restart
   systemd:
     name: firewalld
     state: restarted
     enabled: yes
-  run_once: true
-  delegate_to: '{{ item }}'
-  loop:
-    - "{{ groups['galera_servers'][0] }}"
-    - "{{ groups['galera_servers'][1] }}"
-
-- name: local firewalld enable
-  systemd:
-    name: firewalld
-    state: restarted
-    enabled: yes
-
-#- name: remote firewalld reload
-#  shell: firewall-cmd --reload
-#  run_once: true
-#  delegate_to: '{{ item }}'
-#  loop:
-#    - "{{ groups['galera_servers'][0] }}"
-#    - "{{ groups['galera_servers'][1] }}"
-
-#- name: local firewalld reload
-#  shell: firewall-cmd --reload
-  
-  

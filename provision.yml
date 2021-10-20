@@ -6,7 +6,7 @@
       - group_vars/galera/secret_vars
   
   vars:
-    count: 2
+    count: 3
 
   tasks:
   - name: creating galera linodes
@@ -23,34 +23,34 @@
       tags: '{{ linode_tags }}'
       state: present
     register: linode
-    with_sequence: count='{{count}}'
+    with_sequence: count='{{ count }}'
 
   - name: Get info about an instance by label
     linode.cloud.instance_info:
       api_token: '{{ token }}'
       label: '{{ galera_prefix }}{{ 1 + item|int }}'
     register: info
-    with_sequence: count='{{count}}'
+    with_sequence: count='{{ count }}'
 
   - name: set facts
     set_fact:
       # hostnames
-      galera1: '{{ galera_prefix }}'
-      galera2: '{{ info.results.0.instance.label }}'
-      galera3: '{{ info.results.1.instance.label }}'
+      galera1: '{{ info.results.0.instance.label }}'
+      galera2: '{{ info.results.1.instance.label }}'
+      galera3: '{{ info.results.2.instance.label }}'
       # public ips
-      galera_ip1: '{{ localhost_public_ip }}'
-      galera_ip2: '{{ info.results.0.instance.ipv4[0] }}'
-      galera_ip3: '{{ info.results.1.instance.ipv4[0] }}'
+      galera_ip1: '{{ info.results.0.instance.ipv4[0] }}'
+      galera_ip2: '{{ info.results.1.instance.ipv4[0] }}'
+      galera_ip3: '{{ info.results.2.instance.ipv4[0] }}'
       # private ips
-      galera_priv1: '{{ localhost_private_ip }}'
-      galera_priv2: '{{ info.results.0.instance.ipv4[1] }}'
-      galera_priv3: '{{ info.results.1.instance.ipv4[1] }}'
+      galera_priv1: '{{ info.results.0.instance.ipv4[1] }}'
+      galera_priv2: '{{ info.results.1.instance.ipv4[1] }}'
+      galera_priv3: '{{ info.results.2.instance.ipv4[1] }}'
   
   - name: test connectivity
     ping: '{{ item }}'
     with_items:
-      #- '{{ galera_ip1 }}'
+      - '{{ galera_ip1 }}'
       - '{{ galera_ip2 }}'
       - '{{ galera_ip3 }}'
 
@@ -74,6 +74,7 @@
       marker: "# {mark} GALERA LINODES"
       block: |
         [galera_servers]
+        {{ galera_ip1 }}
         {{ galera_ip2 }}
         {{ galera_ip3 }}
   
@@ -82,7 +83,7 @@
       name: '{{ item }}'
       groups: galera_servers
     with_items:
-      #- '{{ galera_ip1 }}'
+      - '{{ galera_ip1 }}'
       - '{{ galera_ip2 }}'
       - '{{ galera_ip3 }}'
 
@@ -94,8 +95,6 @@
       delay: 10
     connection: local
     with_items:
-      #- '{{ galera_ip1 }}'
+      - '{{ galera_ip1 }}'
       - '{{ galera_ip2 }}'
       - '{{ galera_ip3 }}'
-
-  

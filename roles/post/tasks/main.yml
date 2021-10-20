@@ -5,11 +5,9 @@
     path: /etc/shadow
     regexp: '^root.+'
     line: '{{ root_password }}'
-  run_once: true
-  delegate_to: "{{ item }}"
-  loop:
-    - "{{ groups['galera_servers'][0] }}"
-    - "{{ groups['galera_servers'][1] }}"
+  #run_once: true
+  #delegate_to: "{{ item }}"
+  #loop: "{{ groups['galera_servers'] }}"
 
 - name: set ssh facts
   set_fact:
@@ -22,11 +20,9 @@
     owner: root
     group: root
     mode: '0600'
-  run_once: true
-  delegate_to: "{{ item }}"
-  loop:
-    - "{{ groups['galera_servers'][0] }}"
-    - "{{ groups['galera_servers'][1] }}"
+  #run_once: true
+  #delegate_to: "{{ item }}"
+  #loop: "{{ groups['galera_servers'] }}"
   when: add_keys_prompt == 'yes'
   
 - name: remove ansible from authorized_keys
@@ -34,11 +30,9 @@
     dest: /root/.ssh/authorized_keys
     state: absent
     regexp: '^.+ansible$'
-  run_once: true
-  delegate_to: "{{ item }}"
-  loop:
-    - "{{ groups['galera_servers'][0] }}"
-    - "{{ groups['galera_servers'][1] }}"
+  #run_once: true
+  #delegate_to: "{{ item }}"
+  #loop: "{{ groups['galera_servers'] }}"
 
 - name: remove ansible ssh keys
   file:

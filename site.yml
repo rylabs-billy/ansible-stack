@@ -13,7 +13,7 @@
 
 # linodes
 - name: configure galera linodes
-  hosts: localhost:galera_servers
+  hosts: galera_servers
   any_errors_fatal: true
   user: root
   vars_files:

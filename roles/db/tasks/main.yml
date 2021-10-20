@@ -1,6 +1,6 @@
 # roles/db/tasks
 
-- name: install mariadb and dependencies
+- name: install mariadb
   import_tasks: install.yml
 
 - name: configure ssl/tls
