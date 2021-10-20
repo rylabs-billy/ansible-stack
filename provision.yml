@@ -11,7 +11,7 @@
   tasks:
   - name: creating galera linodes
     linode.cloud.instance:
-      label: '{{ galera_prefix }}{{ 1 + item|int }}'
+      label: '{{ galera_prefix }}{{ item }}'
       api_token: '{{ token }}'
       type: '{{ type }}'
       region: '{{ region }}'
@@ -28,7 +28,7 @@
   - name: Get info about an instance by label
     linode.cloud.instance_info:
       api_token: '{{ token }}'
-      label: '{{ galera_prefix }}{{ 1 + item|int }}'
+      label: '{{ galera_prefix }}{{ item }}'
     register: info
     with_sequence: count='{{ count }}'
 
