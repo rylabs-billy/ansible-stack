@@ -56,7 +56,7 @@ function ansible:build {
   ssh_keys: ${ANSIBLE_SSH_PUB_KEY}
   galera_prefix: ${LINODE_PARAMS[3]}
   cluster_name: ${CLUSTER_NAME}
-  type: ${LINODE_PARAMS[0]}
+  instance_type: ${LINODE_PARAMS[0]}
   region: ${LINODE_PARAMS[1]}
   image: ${LINODE_PARAMS[2]}
   group:
