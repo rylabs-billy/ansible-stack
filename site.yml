@@ -6,7 +6,6 @@
   user: root
   vars_files:
     - group_vars/galera/vars
-    - group_vars/galera/secret_vars
   
   roles:
     - precheck
@@ -18,7 +17,6 @@
   user: root
   vars_files:
     - group_vars/galera/vars
-    - group_vars/galera/secret_vars
   
   roles:
     - common
