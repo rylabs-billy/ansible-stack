@@ -73,7 +73,7 @@ cat group_vars/galera/vars
 }
 
 function ansible:deploy {
-  ansible-playbook provision.yml --extra-vars "root_pass=${TEMP_ROOT_PASS} token=${TOKEN_PASSWORD}"
+  ansible-playbook provision.yml
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=${ADD_SSH_KEYS}"
 }
 
