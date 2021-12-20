@@ -12,10 +12,9 @@ function cleanup {
 }
 
 # global constants
-#readonly ROOT_PASS=$(cat /etc/shadow | grep root)
-#readonly GIT_REPO="https://rylabs-billy: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@github.com/rylabs-billy/ansible-stack.git"
-#readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
-#readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
+readonly ROOT_PASS=$(cat /etc/shadow | grep root)
+readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
+readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
 #readonly PUBLIC_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[0])
 #readonly VARS_PATH="./group_vars/galera/vars"
 #readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
