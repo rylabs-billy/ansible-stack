@@ -37,7 +37,7 @@ function ssh_key {
     ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
     export ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
     export ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
-    local SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
+    export SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
     chmod 700 ${HOME}/.ssh
     chmod 600 ${SSH_KEY_PATH}
     eval $(ssh-agent)
