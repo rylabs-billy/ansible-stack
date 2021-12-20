@@ -13,7 +13,7 @@
     linode.cloud.instance:
       label: '{{ galera_prefix }}{{ item }}'
       api_token: '{{ token }}'
-      type: '{{ instance_type }}'
+      type: '{{ type }}'
       region: '{{ region }}'
       image: '{{ image }}'
       root_pass: '{{ root_pass }}'

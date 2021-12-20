@@ -26,9 +26,10 @@ function destroy {
 }
 
 function secrets {
-    local VAULT_PASS=$(openssl rand -base64 32)
-    local TEMP_ROOT_PASS=$(openssl rand -base64 32)
-    echo "${VAULT_PASS}" > ./vault-pass
+  local SECRET_VARS_PATH="./group_vars/galera/secret_vars"
+  local VAULT_PASS=$(openssl rand -base64 32)
+  local TEMP_ROOT_PASS=$(openssl rand -base64 32)
+  echo "${VAULT_PASS}" > ./vault-pass
 	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
 	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
 }
@@ -47,16 +48,15 @@ function ssh_key {
 
 # production
 function ansible:build {
-  #secrets
+  secrets
   ssh_key
-  export TEMP_ROOT_PASS=$(openssl rand -base64 32)
   # write vars file
   sed 's/  //g' <<EOF > group_vars/galera/vars
   # linode vars
   ssh_keys: ${ANSIBLE_SSH_PUB_KEY}
   galera_prefix: ${LINODE_PARAMS[3]}
   cluster_name: ${CLUSTER_NAME}
-  instance_type: ${LINODE_PARAMS[0]}
+  type: ${LINODE_PARAMS[0]}
   region: ${LINODE_PARAMS[1]}
   image: ${LINODE_PARAMS[2]}
   group:
@@ -70,6 +70,7 @@ function ansible:build {
   ca_common_name: ${CA_COMMON_NAME}
   common_name: ${COMMON_NAME}
 EOF
+cat group_vars/galera/vars
 }
 
 function ansible:deploy {
