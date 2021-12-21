@@ -41,6 +41,7 @@
     privatekey_content: '{{ ca_key.privatekey }}'
     privatekey_passphrase: '{{ ca_password }}'
     csr_content: '{{ ca_csr.csr }}'
+    selfsigned_not_after: +36525d  # new
     provider: selfsigned
   register: ca_crt
   run_once: true
@@ -73,6 +74,7 @@
     ownca_content: '{{ ca_crt.certificate }}'
     ownca_privatekey_content: '{{ ca_key.privatekey }}'
     ownca_privatekey_passphrase: '{{ ca_password }}'
+    ownca_not_after: +36525d  # new
     provider: ownca
   register: server_crt
   run_once: true
