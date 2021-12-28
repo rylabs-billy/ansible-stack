@@ -96,10 +96,10 @@ function test:build {
 }
 
 function test:deploy {
-  local image="${2}"
-  local distro=$(echo ${image} | awk -F / '{print $2}')
+  local distro="${1}"
+  #local distro=$(echo ${image} | awk -F / '{print $2}')
   local date="$(date '+%Y-%m-%d_%H%M%S')"
-  ansible-playbook provision.yml --extra-vars "galera_prefix=${distro}_${date} image=${image}"
+  ansible-playbook provision.yml --extra-vars "galera_prefix=${distro}_${date} image=linode/${distro}"
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=${ADD_SSH_KEYS}"
   verify
 }
