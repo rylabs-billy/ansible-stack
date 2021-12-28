@@ -2,7 +2,7 @@
 
 # cluster pre-check
 - name: pre-check
-  hosts: localhost
+  hosts: galera_servers
   user: root
   vars_files:
     - group_vars/galera/vars
