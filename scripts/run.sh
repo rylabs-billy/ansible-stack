@@ -19,7 +19,7 @@ readonly VARS_PATH="./group_vars/galera/vars"
 
 # utility functions
 function destroy {
-    ansible-playbook -i hosts destroy.yml
+    ansible-playbook -i hosts destroy.yml ${1} ${2}
 }
 
 function secrets {
@@ -51,7 +51,7 @@ function lint {
 
 function verify {
     ansible-playbook -i hosts verify.yml
-    destroy
+    destroy --extra-vars "galera_prefix=${DISTRO}_${DATE}"
 }
 
 # production
@@ -79,7 +79,6 @@ function ansible:build {
   ca_common_name: ${CA_COMMON_NAME}
   common_name: ${COMMON_NAME}
 EOF
-cat ${VARS_PATH}
 }
 
 function ansible:deploy {
@@ -91,16 +90,17 @@ function ansible:deploy {
 function test:build {
   echo "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
+  cat "./group_vars/galera/vars" # new
   secrets
   ssh_key
 }
 
 function test:deploy {
-  local distro="${1}"
+  local DISTRO="${1}"
   #local distro=$(echo ${image} | awk -F / '{print $2}')
-  local date="$(date '+%Y-%m-%d_%H%M%S')"
-  ansible-playbook provision.yml --extra-vars "galera_prefix=${distro}_${date} image=linode/${distro}"
-  ansible-playbook -i hosts site.yml --extra-vars "ssh_keys=\"${ANSIBLE_SSH_PUB_KEY}\" root_password=${ROOT_PASS}  add_keys_prompt=yes"
+  local DATE="$(date '+%Y-%m-%d_%H%M%S')"
+  ansible-playbook provision.yml --extra-vars "ssh_keys=\"${ANSIBLE_SSH_PUB_KEY}\" galera_prefix=${DISTRO}_${DATE} image=linode/${DISTRO}"
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=yes"
   verify
 }
 
