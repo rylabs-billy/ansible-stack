@@ -25,7 +25,7 @@ jobs:
 
       - name: group_vars integrity check
         run: |
-          echo "01381e3b56eefea3a1449752686681684aab7e95ee1344cb8ab900a2c8a3be45 group_vars/galera/vars" | sha256sum -c
+          echo "07b100243cdaec76c5f71a5225b8715235e93f7e5b80a86a10d185dcc1f83397 group_vars/galera/vars" | sha256sum -c
           
       - name: install dependencies
         run: |
@@ -34,7 +34,7 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
           ansible-galaxy collection install linode.cloud community.crypto community.mysql
-          
+
       - name: build ansible environment
         run: | 
           run test:build
