@@ -15,9 +15,6 @@ function cleanup {
 readonly ROOT_PASS=$(cat /etc/shadow | grep root)
 readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
 readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
-#readonly PUBLIC_IP=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .ipv4[0])
-#readonly VARS_PATH="./group_vars/galera/vars"
-#readonly SECRET_VARS_PATH="./group_vars/galera/secret_vars"
 
 # utility functions
 function destroy {
@@ -45,12 +42,24 @@ function ssh_key {
     echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
 }
 
+function lint {
+  yamllint .
+  ansible-lint
+  flake8
+}
+
+function verify {
+    ansible-playbook -i hosts verify.yml
+    destroy
+}
+
 # production
 function ansible:build {
+  local VARS_PATH="./group_vars/galera/vars"
   secrets
   ssh_key
   # write vars file
-  sed 's/  //g' <<EOF > group_vars/galera/vars
+  sed 's/  //g' <<EOF > ${VARS_PATH}
   # linode vars
   ssh_keys: ${ANSIBLE_SSH_PUB_KEY}
   galera_prefix: ${LINODE_PARAMS[3]}
@@ -69,7 +78,7 @@ function ansible:build {
   ca_common_name: ${CA_COMMON_NAME}
   common_name: ${COMMON_NAME}
 EOF
-cat group_vars/galera/vars
+cat ${VARS_PATH}
 }
 
 function ansible:deploy {
@@ -78,34 +87,25 @@ function ansible:deploy {
 }
 
 # testing
-function build {
-    #curl -so ${VARS_PATH} ${VARS_URL}
-	echo "${VAULT_PASS}" > ./vault-pass
-	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
-	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
-    
-    # add ssh key
-    #ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null
-    #export ANSIBLE_SSH_PUB_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519.pub)
-    #export ANSIBLE_SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
-    chmod 700 ${HOME}/.ssh
-    chmod 600 ${SSH_KEY_PATH}
-    eval $(ssh-agent)
-    ssh-add ${SSH_KEY_PATH}
-    echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
+function test:build {
+  curl -so ${VARS_PATH} ${VARS_URL}
+  secret
+  ssh_key
 }
 
-
-
-case $1 in
-    #private_ip) "$@"; exit;;
-    ansible:build) "$@"; exit;;
-    ansible:deploy) "$@"; exit;;
-    build) "$@"; exit;;
-    env) "$@"; exit;;
-esac
+function test:deploy {
+  local image="${2}"
+  local distro=$(echo ${image} | awk -F / '{print $2}')
+  local date="$(date '+%Y-%m-%d_%H%M%S')"
+  ansible-playbook provision.yml --extra-vars "galera_prefix=${distro}_${date} image=${image}"
+  ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=${ADD_SSH_KEYS}"
+  verify
+}
 
 # main
-#private_ip
-ansible
-build
+case $1 in
+    ansible:build) "$@"; exit;;
+    ansible:deploy) "$@"; exit;;
+    test:build) "$@"; exit;;
+    test:deploy) "$@"; exit;;
+esac

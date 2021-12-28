@@ -1,0 +1,44 @@
+---
+name: Ubuntu 20.04
+
+on: [push, pull_request]
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin@v2
+        with:
+          fetch-depth: 1
+
+      - name: set up python
+        uses: actions/setup-python@f38219332975fe8f9c04cca981d674bf22aea1d3 #pin@v2.3
+        with:
+          python-version: 3.9
+
+      - name: copy run script to path
+        run: |
+          mkdir -p $HOME/.local/bin
+          cp scripts/run.sh $HOME/.local/bin/run
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: group_vars integrity check
+        run: |
+          echo "01381e3b56eefea3a1449752686681684aab7e95ee1344cb8ab900a2c8a3be45 group_vars/galera/vars" | sha256sum -c
+          
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install openssh-server -y
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          ansible-galaxy collection install linode.cloud community.crypto community.mysql
+          
+      - name: build ansible environment
+        run: | 
+          run test:build
+          run test:ubuntu20.04
+        env:
+          TOKEN_PASSWORD: ${{ secrets.LINODE_API_TOKEN }}
+          VARS_URL: ${{ secrets.TEST_VARS_URL }}
