@@ -15,6 +15,7 @@ function cleanup {
 readonly ROOT_PASS=$(sudo cat /etc/shadow | grep root)
 readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
 readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
+readonly VARS_PATH="./group_vars/galera/vars"
 
 # utility functions
 function destroy {
@@ -55,7 +56,7 @@ function verify {
 
 # production
 function ansible:build {
-  local VARS_PATH="./group_vars/galera/vars"
+  #local VARS_PATH="./group_vars/galera/vars"
   secrets
   ssh_key
   # write vars file
@@ -88,7 +89,7 @@ function ansible:deploy {
 
 # testing
 function test:build {
-  cat "The vars URL is: ${VARS_URL}"
+  echo "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
   secret
   ssh_key

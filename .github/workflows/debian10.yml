@@ -38,7 +38,7 @@ jobs:
       - name: build ansible environment
         run: | 
           run test:build
-          run test:debian10
+          run test:deploy debian10
         env:
           TOKEN_PASSWORD: ${{ secrets.LINODE_API_TOKEN }}
           VARS_URL: ${{ secrets.TEST_VARS_URL }}

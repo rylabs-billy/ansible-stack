@@ -38,7 +38,7 @@ jobs:
       - name: build ansible environment
         run: | 
           run test:build
-          run test:ubuntu20.04
+          run test:deploy ubuntu20.04
         env:
           TOKEN_PASSWORD: ${{ secrets.LINODE_API_TOKEN }}
           VARS_URL: ${{ secrets.TEST_VARS_URL }}
