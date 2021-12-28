@@ -99,7 +99,7 @@ function test:deploy {
   local DISTRO="${1}"
   #local distro=$(echo ${image} | awk -F / '{print $2}')
   local DATE="$(date '+%Y-%m-%d_%H%M%S')"
-  echo "${ANSIBLE_SSH_PUB_KEY}"
+  echo "the ssh key is: ${ANSIBLE_SSH_PUB_KEY}"
   ansible-playbook provision.yml --extra-vars "ssh_keys=\"${ANSIBLE_SSH_PUB_KEY}\" galera_prefix=${DISTRO}_${DATE} image=linode/${DISTRO}"
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=yes"
   verify
