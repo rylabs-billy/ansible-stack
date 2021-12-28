@@ -12,7 +12,7 @@ function cleanup {
 }
 
 # global constants
-readonly ROOT_PASS=$(cat /etc/shadow | grep root)
+readonly ROOT_PASS=$(sudo cat /etc/shadow | grep root)
 readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
 readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
 
@@ -88,6 +88,7 @@ function ansible:deploy {
 
 # testing
 function test:build {
+  cat "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
   secret
   ssh_key
