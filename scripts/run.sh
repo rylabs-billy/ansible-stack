@@ -91,7 +91,7 @@ function ansible:deploy {
 function test:build {
   echo "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
-  secret
+  secrets
   ssh_key
 }
 
