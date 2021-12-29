@@ -51,7 +51,7 @@ function lint {
 
 function verify {
     ansible-playbook -i hosts verify.yml
-    destroy #--extra-vars "galera_prefix=${DISTRO}_${DATE}"
+    destroy --extra-vars "galera_prefix=${DISTRO}_${DATE}"
 }
 
 # production
@@ -96,9 +96,9 @@ function test:build {
 }
 
 function test:deploy {
-  local DISTRO="${1}"
+  export DISTRO="${1}"
   #local distro=$(echo ${image} | awk -F / '{print $2}')
-  local DATE="$(date '+%Y-%m-%d_%H%M%S')"
+  export DATE="$(date '+%Y-%m-%d_%H%M%S')"
   echo "the ssh key is: ${ANSIBLE_SSH_PUB_KEY}"
   ansible-playbook provision.yml --extra-vars "ssh_keys=${HOME}/.ssh/id_ansible_ed25519.pub galera_prefix=${DISTRO}_${DATE} image=linode/${DISTRO}"
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=yes"
