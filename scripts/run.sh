@@ -51,7 +51,7 @@ function lint {
 
 function verify {
     ansible-playbook -i hosts verify.yml
-    destroy --extra-vars "galera_prefix=${DISTRO}_${DATE}"
+    destroy #--extra-vars "galera_prefix=${DISTRO}_${DATE}"
 }
 
 # production
