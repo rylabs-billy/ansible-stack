@@ -16,6 +16,8 @@
   hosts: galera_servers
   any_errors_fatal: true
   user: root
+  vars: # new
+    local_home: "{{ lookup('env','HOME') }}"
   vars_files:
     - group_vars/galera/vars
     - group_vars/galera/secret_vars
