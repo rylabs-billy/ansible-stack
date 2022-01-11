@@ -95,9 +95,11 @@ function test:build {
   echo "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
   cat "./group_vars/galera/vars" # new
-  mkdir ${HOME}/.ssh
+  mkdir -p ${HOME}/.ssh
   echo ${ACCOUNT_SSH_KEYS} >> ${HOME}/.ssh/authorized_keys # new
+  echo "authorized keys are:" # new
   cat ${HOME}/.ssh/authorized_keys # new
+  echo "authorized keys are:" # new
   secrets
   ssh_key
 }
