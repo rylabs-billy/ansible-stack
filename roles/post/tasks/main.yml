@@ -13,7 +13,8 @@
 - name: add account ssh keys 
   copy:
     #src: /root/.ssh/authorized_keys
-    src: '{{ local_home }}/root/.ssh/authorized_keys'
+    #src: '{{ local_home }}/root/.ssh/authorized_keys'
+    src: '{{ local_home }}/.ssh/authorized_keys'
     dest:  /root/.ssh/authorized_keys
     owner: root
     group: root
