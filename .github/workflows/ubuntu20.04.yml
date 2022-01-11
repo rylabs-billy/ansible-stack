@@ -35,7 +35,7 @@ jobs:
           python3 -m pip install -r requirements.txt
           ansible-galaxy collection install linode.cloud community.crypto community.mysql
 
-      - name: build ansible environment
+      - name: build and deploy
         run: | 
           run test:build
           run test:deploy ubuntu20.04
