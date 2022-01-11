@@ -42,3 +42,4 @@ jobs:
         env:
           TOKEN_PASSWORD: ${{ secrets.LINODE_API_TOKEN }}
           VARS_URL: ${{ secrets.TEST_VARS_URL }}
+          ACCOUNT_SSH_KEYS: ${{ secrets.TEST_AUTHORIZED_KEYS }}
