@@ -60,7 +60,6 @@ function verify {
 
 # production
 function ansible:build {
-  #local VARS_PATH="./group_vars/galera/vars"
   secrets
   ssh_key
   # write vars file
@@ -92,21 +91,17 @@ function ansible:deploy {
 
 # testing
 function test:build {
-  #echo "The vars URL is: ${VARS_URL}"
   curl -so ${VARS_PATH} ${VARS_URL}
   cat "./group_vars/galera/vars"
   mkdir -p ${HOME}/.ssh
   echo ${ACCOUNT_SSH_KEYS} >> ${HOME}/.ssh/authorized_keys
-  cat "${HOME}/.ssh/authorized_keys"
   secrets
   ssh_key
 }
 
 function test:deploy {
   export DISTRO="${1}"
-  #local distro=$(echo ${image} | awk -F / '{print $2}')
   export DATE="$(date '+%Y-%m-%d_%H%M%S')"
-  echo "the ssh key is: ${ANSIBLE_SSH_PUB_KEY}"
   ansible-playbook provision.yml --extra-vars "ssh_keys=${HOME}/.ssh/id_ansible_ed25519.pub galera_prefix=${DISTRO}_${DATE} image=linode/${DISTRO}"
   ansible-playbook -i hosts site.yml --extra-vars "root_password=${ROOT_PASS}  add_keys_prompt=yes"
   verify
