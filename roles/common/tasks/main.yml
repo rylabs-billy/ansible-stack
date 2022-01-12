@@ -6,11 +6,6 @@
     content: 'Acquire::ForceIPv4 "true";'
     dest: /etc/apt/apt.conf.d/99force-ipv4
 
-# new
-- name: Example using fail and when together
-  fail:
-    msg: Testing errors.
-# end new
 - name: apt update
   apt:
     update_cache: yes
