@@ -8,7 +8,6 @@
   
   vars:
     count: 3
-  #  test: false
 
   tasks:
   - name: deleting galera prod linodes
@@ -18,12 +17,3 @@
       api_token: '{{ token }}'
       state: absent
     with_sequence: count='{{count}}'
-    #when: not test
-
-#  - name: deleting galera test linodes
-#    linode.cloud.instance:
-#      label: '{{ galera_prefix }}{{ item }}'
-#      api_token: '{{ token }}'
-#      state: absent
-#    with_sequence: count='{{count}}'
-#    when: test

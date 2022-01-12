@@ -20,7 +20,7 @@ readonly VARS_PATH="./group_vars/galera/vars"
 # utility functions
 function destroy {
   if [ -n "${DISTRO}" ] && [ -n "${DATE}" ]; then
-    ansible-playbook -i hosts destroy.yml --extra-vars "galera_prefix=${DISTRO}_${DATE}" #test=true
+    ansible-playbook -i hosts destroy.yml --extra-vars "galera_prefix=${DISTRO}_${DATE}"
   else
     ansible-playbook -i hosts destroy.yml
   fi
@@ -61,6 +61,7 @@ function verify {
 # production
 function ansible:build {
   secrets
+  fail # new
   ssh_key
   # write vars file
   sed 's/  //g' <<EOF > ${VARS_PATH}
@@ -96,6 +97,7 @@ function test:build {
   mkdir -p ${HOME}/.ssh
   echo ${ACCOUNT_SSH_KEYS} >> ${HOME}/.ssh/authorized_keys
   secrets
+  fail # new
   ssh_key
 }
 
