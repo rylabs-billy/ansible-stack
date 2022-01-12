@@ -20,7 +20,7 @@ readonly VARS_PATH="./group_vars/galera/vars"
 # utility functions
 function destroy {
   if [ -n "${DISTRO}" ] && [ -n "${DATE}" ]; then
-    ansible-playbook -i hosts destroy.yml --extra-vars "galera_prefix=${DISTRO}_${DATE} test=true"
+    ansible-playbook -i hosts destroy.yml --extra-vars "galera_prefix=${DISTRO}_${DATE}" #test=true
   else
     ansible-playbook -i hosts destroy.yml
   fi
