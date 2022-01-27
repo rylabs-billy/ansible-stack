@@ -31,7 +31,7 @@ function secrets {
   local VAULT_PASS=$(openssl rand -base64 32)
   local TEMP_ROOT_PASS=$(openssl rand -base64 32)
   echo "${VAULT_PASS}" > ./.vault-pass
-	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' >> ${SECRET_VARS_PATH}
+	ansible-vault encrypt_string "${TEMP_ROOT_PASS}" --name 'root_pass' > ${SECRET_VARS_PATH}
 	ansible-vault encrypt_string "${TOKEN_PASSWORD}" --name 'token' >> ${SECRET_VARS_PATH}
 }
 
