@@ -1,4 +1,5 @@
-# roles/common/handlers
+---
+# roles/common/handlers/main.yml
 
 - name: start fail2ban
   service:

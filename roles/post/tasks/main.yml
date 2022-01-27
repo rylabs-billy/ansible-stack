@@ -1,4 +1,5 @@
-# roles/post/tasks
+---
+# roles/post/tasks/main.yml
 
 - name: set root password on remote nodes
   lineinfile:

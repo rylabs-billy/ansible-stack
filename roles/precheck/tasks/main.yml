@@ -1,4 +1,5 @@
-# roles/precheck/tasks
+---
+# roles/precheck/tasks/main.yml
 
 - name: stat grastate.dat
   stat:

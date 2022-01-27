@@ -1,4 +1,5 @@
-# roles/db/handlers
+# roles/db/handlers/main.yml
+
 - name: firewalld restart
   systemd:
     name: firewalld

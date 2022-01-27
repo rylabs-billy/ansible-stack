@@ -1,3 +1,6 @@
+---
+# group_vars/galera/vars
+
 # linode vars
 ssh_keys: 
 galera_prefix: 
@@ -16,3 +19,7 @@ organization_name:
 email_address:
 ca_common_name:
 common_name:
+
+# secrets
+#root_pass: '{{ vault_root_pass }}'
+#token: '{{ vault_token }}'
