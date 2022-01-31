@@ -31,7 +31,7 @@ If you cannot use the Molecule approach due to limitations in your local environ
 
 The approach requires putting real values into the `.valut-pass`, `group_vars/galera/vars` and `group_vars/galera/secret_vars`. 
 
-> :warning: Clear these values before pushing changes to your fork in order to avoid exposing sensitive information.
+> :warning: WARNING: Clear these values before pushing changes to your fork in order to avoid exposing sensitive information.
 
 Put your [vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html#encrypting-content-with-ansible-vault) password in the `.vault-pass` file. Encrypt your Linode root password and valid [APIv4 token](https://www.linode.com/docs/guides/getting-started-with-the-linode-api/#create-an-api-token) with `ansible-vault`. Replace the value of `@R34llyStr0ngP455w0rd!` with your own strong password and `pYPE7TvjNzmhaEc1rW4i` with your own access token.
 ```

@@ -94,7 +94,7 @@ function test:build {
   curl -so ${VARS_PATH} ${VARS_URL}
   cat "./group_vars/galera/vars"
   mkdir -p ${HOME}/.ssh
-  echo ${ACCOUNT_SSH_KEYS} >> ${HOME}/.ssh/authorized_keys
+  #echo ${ACCOUNT_SSH_KEYS} >> ${HOME}/.ssh/authorized_keys
   secrets
   ssh_key
 }
