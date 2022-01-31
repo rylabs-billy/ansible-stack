@@ -11,7 +11,7 @@ function cleanup {
   fi
 }
 
-# global constants
+# constants
 readonly ROOT_PASS=$(sudo cat /etc/shadow | grep root)
 readonly LINODE_PARAMS=($(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .type,.region,.image,.label))
 readonly TAGS=$(curl -sH "Authorization: Bearer ${TOKEN_PASSWORD}" "https://api.linode.com/v4/linode/instances/${LINODE_ID}" | jq -r .tags)
